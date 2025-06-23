@@ -1,0 +1,10 @@
+spring:
+  r2dbc:
+    url: r2dbc:pool:postgresql://postgres.aouvfnldkfybtfbfhrap:v6g7A0oiFvXzWHLh@aws-0-us-east-2.pooler.supabase.com:5432/postgres
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://securetoken.google.com/security-prs2
+          jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com

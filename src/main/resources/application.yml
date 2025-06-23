@@ -1,0 +1,19 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: product
+
+  r2dbc:
+    url: ${DATABASE_URL}
+    # url: r2dbc:pool:postgresql://aws-0-us-east-2.pooler.supabase.com:5432/postgres
+    # usuario original: postgres.aouvfnldkfybtfbfhrap
+    # contraseña original: v6g7A0oiFvXzWHLh
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI}
+          jwk-set-uri: ${JWT_JWK_SET_URI}
