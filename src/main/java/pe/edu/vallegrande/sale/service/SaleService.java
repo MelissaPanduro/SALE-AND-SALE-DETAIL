@@ -20,8 +20,7 @@ public class SaleService {
 
     private final SaleRepository saleRepository;
     private final SaleDetailRepository saleDetailRepository;
-    private final ProductoService productoService;
-    private final ProductClient productClient; // 🔗 Cliente para comunicación
+    private final ProductClient productClient; // 🔗 Cliente para comunicación con el microservicio de productos
 
     public Mono<SaleDto> save(SaleDto saleDto) {
         Sale sale = Sale.builder()
@@ -40,7 +39,7 @@ public class SaleService {
                         int packages = detailDto.getPackages();
                         BigDecimal pricePerKg = detailDto.getPricePerKg(); // ✅ se toma del DTO
 
-                        return productoService.getProductById(productId)
+                        return productClient.getProductById(productId)
                                 .flatMap(product -> {
                                     BigDecimal weight = product.getPackageWeight();
                                     BigDecimal totalWeight = weight.multiply(BigDecimal.valueOf(packages));
@@ -56,7 +55,7 @@ public class SaleService {
                                             .totalPrice(totalPrice)
                                             .build();
 
-                                    return productoService.reduceStock(productId, packages)
+                                    return productClient.reduceStock(productId, packages)
                                             .then(saleDetailRepository.save(detail));
                                 });
                     })
@@ -130,20 +129,18 @@ public class SaleService {
                 .flatMap(sale -> getById(sale.getId()));
     }
 
-
     public Flux<SaleDto> getSalesByRuc(String ruc) {
-    return saleRepository.findByRuc(ruc)
-            .map(sale -> {
-                SaleDto dto = new SaleDto();
-                dto.setId(sale.getId());
-                dto.setSaleDate(sale.getSaleDate());
-                dto.setName(sale.getName());
-                dto.setRuc(sale.getRuc());
-                dto.setAddress(sale.getAddress());
-                dto.setDetails(null); // no se incluyen los detalles
-                return dto;
-            });
+        return saleRepository.findByRuc(ruc)
+                .map(sale -> {
+                    SaleDto dto = new SaleDto();
+                    dto.setId(sale.getId());
+                    dto.setSaleDate(sale.getSaleDate());
+                    dto.setName(sale.getName());
+                    dto.setRuc(sale.getRuc());
+                    dto.setAddress(sale.getAddress());
+                    dto.setDetails(null); // no se incluyen los detalles
+                    return dto;
+                });
     }
-
-
+    
 }

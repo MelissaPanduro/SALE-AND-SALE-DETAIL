@@ -17,3 +17,8 @@ spring:
         jwt:
           issuer-uri: ${JWT_ISSUER_URI}
           jwk-set-uri: ${JWT_JWK_SET_URI}
+
+# Configuración para el microservicio de productos
+microservices:
+  product-service:
+    url: https://ms-product-ix0t.onrender.com
